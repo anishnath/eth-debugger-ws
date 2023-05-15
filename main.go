@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"eth-ws/nodekey"
-	"fmt"
+	"eth-ws/wallet"
 	"log"
 	"net/http"
 )
@@ -25,6 +25,9 @@ type Libp2pNodeKeyRequestBody struct {
 func main() {
 	http.HandleFunc("/generateDevp2pNodeKey", GenerateDevp2pNodeKey)
 	http.HandleFunc("/generateLibp2pNodeKey", GenerateLibp2pNodeKey)
+	http.HandleFunc("/parseWallet", wallet.HandleWalletUpload)
+	http.HandleFunc("/generateMnemonic", wallet.NewMnemonic)
+	http.HandleFunc("/generateWallet", wallet.NewWallet)
 	log.Fatal(http.ListenAndServe(":1888", nil))
 }
 
@@ -43,8 +46,6 @@ func GenerateDevp2pNodeKey(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Generate node key
-	fmt.Println(requestBody)
 	key, err := nodekey.GenerateDevp2pNodeKey(requestBody.Ip, requestBody.Sign, requestBody.Tcp, requestBody.Udp)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
