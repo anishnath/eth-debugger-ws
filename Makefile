@@ -3,6 +3,7 @@
 # Set the GOOS and GOARCH environment variables
 export GOOS=linux
 export GOARCH=amd64
+export CGO_ENABLED=0
 
 # Define the target executable name
 TARGET=eth-ws
